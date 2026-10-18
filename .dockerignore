@@ -1,0 +1,13 @@
+.git
+.env
+.venv
+.playwright-cli
+output
+**/__pycache__
+**/.pytest_cache
+**/*.pyc
+**/*.db
+frontend/node_modules
+frontend/.next
+frontend/out
+frontend/*.tsbuildinfo

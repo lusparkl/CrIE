@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --ink: #101012;
+  --canvas: #f6f6f7;
+  --surface: #ffffff;
+  --surface-muted: #f2f2f3;
+  --border: #e3e3e6;
+  --chart-grid: #e4e4e7;
+  --chart-tooltip: #ffffff;
+  --chart-text: #64748b;
+  --table-header: #f1f5f9;
+  --table-stripe: #f8fafc;
+  --table-border: #dbe2ea;
+  --table-text: #475569;
+  --map-canvas: #f8fafc;
+  --map-grid: rgb(148 163 184 / .14);
+}
+
+.dark {
+  color-scheme: dark;
+  --ink: #f4f4f5;
+  --canvas: #08090a;
+  --surface: #101113;
+  --surface-muted: #17181b;
+  --border: #28292d;
+  --chart-grid: #28292d;
+  --chart-tooltip: #17181b;
+  --chart-text: #94959c;
+  --table-header: #191a1e;
+  --table-stripe: #141518;
+  --table-border: #303137;
+  --table-text: #d4d4d8;
+  --map-canvas: #0d0e10;
+  --map-grid: rgb(161 161 170 / .1);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--canvas);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 180ms ease, color 180ms ease;
+  background-image: radial-gradient(circle at 50% -20%, rgba(139, 92, 246, .07), transparent 34rem);
+  background-attachment: fixed;
+}
+
+.prompt-table thead { background-color: var(--table-header); }
+.prompt-table th {
+  color: var(--ink);
+  border-bottom: 2px solid var(--table-border);
+}
+.prompt-table tbody tr:nth-child(even) { background-color: var(--table-stripe); }
+.prompt-table td {
+  color: var(--table-text);
+  border-bottom: 1px solid var(--table-border);
+}
+.prompt-table tbody tr:last-child td { border-bottom: 0; }
+.prompt-map-canvas {
+  background-color: var(--map-canvas);
+  background-image:
+    linear-gradient(var(--map-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--map-grid) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+::selection { background: #f5c8b9; color: #142b3d; }
+
+@layer components {
+  .container-page { @apply mx-auto w-full max-w-[1240px] px-5 sm:px-8; }
+  .button-primary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-coral focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white dark:focus:ring-offset-black; }
+  .button-secondary { @apply inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-ink transition hover:border-slate-400 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-coral focus:ring-offset-2 dark:border-zinc-700 dark:bg-transparent dark:hover:border-zinc-500 dark:hover:bg-zinc-900 dark:focus:ring-offset-black; }
+  .card { @apply rounded-xl border border-slate-200/80 bg-white shadow-card dark:border-zinc-800 dark:bg-[#101113] dark:shadow-none; }
+  .label { @apply mb-2 block text-sm font-semibold text-ink; }
+  .input { @apply w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-ink outline-none transition placeholder:text-slate-400 focus:border-coral focus:ring-2 focus:ring-coral/10 dark:border-zinc-700 dark:bg-[#0c0d0f] dark:focus:border-coral dark:focus:ring-coral/20; }
+  .eyebrow { @apply text-xs font-bold uppercase tracking-[0.16em] text-coral; }
+}
+
+/* Dark theme fallbacks for shared utility-led surfaces. The existing light theme
+   remains intact; dark is applied by default from the root layout. */
+.dark .bg-white { background-color: var(--surface) !important; }
+.dark .bg-white\/95 { background-color: rgb(8 9 10 / .88) !important; }
+.dark .bg-slate-50,
+.dark .bg-slate-50\/70,
+.dark .bg-slate-100 { background-color: var(--surface-muted) !important; }
+.dark .bg-slate-200 { background-color: #28292d !important; }
+.dark .bg-\[\#fbfaf7\],
+.dark .bg-\[\#f3f3ef\] { background-color: var(--canvas) !important; }
+.dark .bg-\[\#fbfbf8\],
+.dark .bg-\[\#fffefb\],
+.dark .bg-\[\#faf9f4\] { background-color: #0c0d0f !important; }
+.dark .bg-navy { background-color: #1a1b1f; }
+.dark .bg-ink { background-color: #08090a; }
+
+.dark .text-ink,
+.dark .text-slate-800,
+.dark .text-slate-700 { color: #f4f4f5 !important; }
+.dark .text-navy { color: #d4d4d8 !important; }
+.dark .text-slate-600 { color: #c0c0c5 !important; }
+.dark .text-slate-500 { color: #9b9ca3 !important; }
+.dark .text-slate-400 { color: #7d7e86 !important; }
+.dark .text-slate-300 { color: #66676e !important; }
+
+.dark .border-slate-100,
+.dark .border-slate-200,
+.dark .border-slate-200\/80,
+.dark .border-slate-300 { border-color: var(--border) !important; }
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) { border-color: var(--border) !important; }
+.dark .hover\:bg-slate-50:hover { background-color: #17181b !important; }
+.dark .hover\:text-ink:hover { color: #ffffff !important; }
+
+.dark .bg-red-50 { background-color: rgb(127 29 29 / .22) !important; }
+.dark .border-red-100,
+.dark .border-red-200 { border-color: rgb(248 113 113 / .3) !important; }
+.dark .text-red-700 { color: #fca5a5 !important; }
+.dark .bg-amber-50,
+.dark .bg-amber-50\/70 { background-color: rgb(120 53 15 / .25) !important; }
+.dark .border-amber-200 { border-color: rgb(251 191 36 / .3) !important; }
+.dark .text-amber-700,
+.dark .text-amber-900,
+.dark .text-amber-900\/75 { color: #fcd58b !important; }
+.dark .bg-emerald-50,
+.dark .bg-emerald-50\/70 { background-color: rgb(6 78 59 / .25) !important; }
+.dark .border-emerald-200 { border-color: rgb(52 211 153 / .28) !important; }
+.dark .text-emerald-700,
+.dark .text-emerald-900,
+.dark .text-emerald-900\/75 { color: #8ce5bd !important; }
+
+.dark textarea,
+.dark input { caret-color: #e76f51; }
+.dark .recharts-legend-item-text { color: var(--chart-text) !important; }
+.dark .recharts-text { fill: var(--chart-text) !important; }
+.dark .recharts-default-tooltip {
+  background-color: var(--chart-tooltip) !important;
+  border-color: var(--border) !important;
+  color: var(--ink) !important;
+}

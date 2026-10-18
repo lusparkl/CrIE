@@ -1,0 +1,38 @@
+#!/bin/bash
+set -euo pipefail
+
+cd /app/backend
+uvicorn app.main:app --host 127.0.0.1 --port 8000 &
+backend_pid=$!
+
+backend_ready=false
+for _ in {1..60}; do
+  if python -c 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/api/health", timeout=1)' 2>/dev/null; then
+    backend_ready=true
+    break
+  fi
+  if ! kill -0 "$backend_pid" 2>/dev/null; then
+    wait "$backend_pid"
+    exit $?
+  fi
+  sleep 1
+done
+
+if [ "$backend_ready" != true ]; then
+  echo "FastAPI did not become healthy within 60 seconds" >&2
+  kill "$backend_pid" 2>/dev/null || true
+  wait "$backend_pid" 2>/dev/null || true
+  exit 1
+fi
+
+cd /app/frontend
+HOSTNAME=0.0.0.0 PORT="${PORT:-3000}" node server.js &
+frontend_pid=$!
+
+shutdown() {
+  kill "$backend_pid" "$frontend_pid" 2>/dev/null || true
+  wait "$backend_pid" "$frontend_pid" 2>/dev/null || true
+}
+trap shutdown EXIT INT TERM
+
+wait -n "$backend_pid" "$frontend_pid"
